@@ -12,7 +12,7 @@ const TOTAL_FRACTIONS = TOTAL_BLOCKS * FRACTIONS_PER_BLOCK;
 const SECONDS_IN_DAY = 86400;
 const BLOCK_INTERVAL_SEC = SECONDS_IN_DAY / TOTAL_BLOCKS;
 const FRACTION_INTERVAL_SEC = SECONDS_IN_DAY / TOTAL_FRACTIONS;
-const START_OFFSET_SEC = 6 * 3600 - 4 * BLOCK_INTERVAL_SEC; // Sets block 4 (Morning Routine) to start at 06:00:00
+const START_OFFSET_SEC = 6 * 3600 - 4 * BLOCK_INTERVAL_SEC; 
 const TARGET_TIMEZONE_HOURS = -3;
 const TARGET_TIMEZONE_MS = TARGET_TIMEZONE_HOURS * 3600000;
 
@@ -54,7 +54,6 @@ let chargeIdx = 0;
 let inProgressIdx = 0;
 let faviconIdx = 0;
 
-// ----- TIME HELPERS -----
 function secondsSinceMidnight() {
   const now = new Date();
   const utc = now.getTime() + now.getTimezoneOffset() * 60000;
@@ -73,7 +72,6 @@ function msUntilNextInterval(intervalSec) {
   return secondsToNext * 1000 + 1; 
 }
 
-// ----- PROGRESS HELPERS -----
 function getBlockProgress() {
   const adjustedSeconds = secondsSinceMidnightAdjusted();
   const secondsIntoBlock = adjustedSeconds % BLOCK_INTERVAL_SEC;
@@ -82,7 +80,6 @@ function getBlockProgress() {
   return Math.max(1, percentage); 
 }
 
-// ----- INDEX HELPERS -----
 function getCurrentFractionIndex() {
   const fractions = Math.floor(secondsSinceMidnightAdjusted() / FRACTION_INTERVAL_SEC);
   return fractions % chargeList.length; 
@@ -93,14 +90,12 @@ function getCurrentBlockIndex() {
   return blocks % inProgressList.length; 
 }
 
-// ----- CHARGE LOGIC -----
 function updateCharge() {
   chargeIdx = getCurrentFractionIndex();
   chargeEl.className = '';
   chargeEl.classList.add(chargeList[chargeIdx]);
 }
 
-// ----- SECOND-BASED LOGIC (OVERLAY/DISPLAY/TITLE) -----
 function updateSecondBasedLogic() {
   const percentageRaw = getBlockProgress();
   const percentageRounded = Math.ceil(percentageRaw); 
@@ -111,26 +106,27 @@ function updateSecondBasedLogic() {
   titleEl.textContent = `${percentageRounded}% – ${activityName}`;
 }
 
-// ----- CAPTION LOGIC -----
+const triggerPulse = (element) => {
+  element.classList.add('transition-pulse');
+  setTimeout(() => {
+    element.classList.remove('transition-pulse');
+  }, 250); 
+};
+
 function updateCaption() {
   inProgressIdx = getCurrentBlockIndex();
   comingSoonEl.textContent = (inProgressIdx < inProgressList.length - 1)
     ? inProgressList[inProgressIdx + 1]
     : inProgressList[0];
   inProgressEl.textContent = inProgressList[inProgressIdx]; 
-  displayEl.classList.add('transition-pulse');
-  setTimeout(() => {
-    displayEl.classList.remove('transition-pulse');
-  }, 250); 
+  triggerPulse(displayEl); 
 }
 
-// ----- FAVICON LOGIC -----
 function updateFavicon() {
   faviconIdx = getCurrentFractionIndex();
   faviconEl.href = faviconList[faviconIdx];
 }
 
-// ----- SCHEDULE LOGIC -----
 function scheduleCharge() {
   updateCharge();
   setTimeout(scheduleCharge, msUntilNextInterval(FRACTION_INTERVAL_SEC));
@@ -151,25 +147,11 @@ function scheduleFavicon() {
   setTimeout(scheduleFavicon, msUntilNextInterval(FRACTION_INTERVAL_SEC));
 }
 
-// ----- CHARGE INTERACTION LOGIC -----
 function setupChargeInteraction() {
-  const addPulseToDisplay = () => {
-    displayEl.classList.add('transition-pulse');
-  };
-  const removePulseFromDisplay = () => {
-    setTimeout(() => {
-        displayEl.classList.remove('transition-pulse');
-    }, 250); 
-  };
-  chargeEl.addEventListener('mouseover', addPulseToDisplay);
-  chargeEl.addEventListener('mouseleave', removePulseFromDisplay);
-  chargeEl.addEventListener('click', () => {
-    addPulseToDisplay();
-    removePulseFromDisplay();
-  });
+  chargeEl.addEventListener('mouseover', () => { triggerPulse(displayEl) });
+  chargeEl.addEventListener('click', () => { triggerPulse(displayEl) });
 }
 
-// ----- INIT -----
 function init() {
   updateSecondBasedLogic();
   overlayEl.offsetHeight;
@@ -183,7 +165,6 @@ function init() {
 
 document.addEventListener('DOMContentLoaded', init);
 
-// ----- SCHEDULE VISUALIZATION HELPERS -----
 function formatSecondsToTime(totalSeconds) {
   let secondsRemaining = Math.round(totalSeconds) % SECONDS_IN_DAY; 
   const hours = Math.floor(secondsRemaining / 3600);

@@ -74,7 +74,18 @@ body {
   transition: background-color 500ms linear;
   width: 128px;
 }
- 
+
+@keyframes pulse-once {
+  0% { transform: translate(-50%, -50%) scale(1) }
+  3.125% { transform: translate(-50%, -50%) scale(0.96875) }
+  50% { transform: translate(-50%, -50%) scale(1.0625) }
+  100% { transform: translate(-50%, -50%) scale(1) }
+}
+
+.transition-pulse {
+  animation: pulse-once 250ms ease-in-out;
+}
+
 .charge--blue {
   background-color: var(--color-blue); 
   background-image: var(--gradient-blue);
@@ -150,22 +161,4 @@ body {
 
 .favicon--red {
   stroke: var(--color-red); 
-}
-
-@keyframes pulse-once {
-  0% { transform: scale(1) }
-  3.125% { transform: scale(0.96875) }
-  50% { transform: scale(1.0625) }
-  100% { transform: scale(1) }
-}
-
-@keyframes pulse-once {
-  0% { transform: translate(-50%, -50%) scale(1) }
-  3.125% { transform: translate(-50%, -50%) scale(0.96875) }
-  50% { transform: translate(-50%, -50%) scale(1.0625) }
-  100% { transform: translate(-50%, -50%) scale(1) }
-}
-
-.transition-pulse {
-  animation: pulse-once 250ms ease-in-out;
 }
