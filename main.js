@@ -151,6 +151,24 @@ function scheduleFavicon() {
   setTimeout(scheduleFavicon, msUntilNextInterval(FRACTION_INTERVAL_SEC));
 }
 
+// ----- CHARGE INTERACTION LOGIC -----
+function setupChargeInteraction() {
+  const addPulseToDisplay = () => {
+    displayEl.classList.add('transition-pulse');
+  };
+  const removePulseFromDisplay = () => {
+    setTimeout(() => {
+        displayEl.classList.remove('transition-pulse');
+    }, 250); 
+  };
+  chargeEl.addEventListener('mouseover', addPulseToDisplay);
+  chargeEl.addEventListener('mouseleave', removePulseFromDisplay);
+  chargeEl.addEventListener('click', () => {
+    addPulseToDisplay();
+    removePulseFromDisplay();
+  });
+}
+
 // ----- INIT -----
 function init() {
   updateSecondBasedLogic();
@@ -160,6 +178,7 @@ function init() {
   scheduleSecondBasedLogic();
   scheduleCaption();
   scheduleFavicon();
+  setupChargeInteraction();
 }
 
 document.addEventListener('DOMContentLoaded', init);
