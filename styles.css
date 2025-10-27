@@ -5,10 +5,14 @@
   --color-green: green;
   --color-red: orangered;
   --color-yellow: gold; 
+  --font-size-display: 2.828427rem;
+  --font-size-small: 0.707107rem;
   --gradient-blue: linear-gradient(0.875turn, cornflowerblue, cyan, cornflowerblue);
   --gradient-green: linear-gradient(0.875turn, darkgreen, lime, darkgreen);
   --gradient-red: linear-gradient(0.875turn, darkred, crimson, darkred);
   --gradient-yellow: linear-gradient(0.875turn, darkgoldenrod, yellow, darkgoldenrod);
+  --line-height-primary: 1.681793;
+  --line-height-secondary: 1.189207;
   --text-color-primary: white;
   --text-color-secondary: hsla(0.625turn 12.5% 56.25%);
 }
@@ -31,7 +35,7 @@ body {
   font-family: system-ui, sans-serif;
   font-size: 1rem;
   font-weight: 400;
-  line-height: 1.5;
+  line-height: var(--line-height-primary);
 }
 
 #battery {
@@ -69,6 +73,7 @@ body {
   background-size: 100% 200%;
   border-radius: 0.5rem;
   border: 1px solid var(--background-color-secondary);
+  margin-bottom: 0.5rem;
   padding-top: 50vh;
   position: relative;
   transition: background-color 500ms linear;
@@ -123,7 +128,7 @@ body {
 
 #display {
   color: var(--text-color-primary);
-  font-size: 3rem;
+  font-size: var(--font-size-display);
   font-weight: 700;
   left: 50%;
   line-height: 1;
@@ -148,7 +153,7 @@ body {
 
 .caption:last-of-type {
   color: var(--text-color-secondary);
-  font-size: 0.75rem;
+  font-size: var(--font-size-small);
 }
 
 .favicon--green {

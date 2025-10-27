@@ -6,13 +6,13 @@ const comingSoonEl = document.getElementById('coming-soon');
 const faviconEl = document.getElementById('favicon');
 const titleEl = document.getElementById('title');
 
-const FRACTIONS_PER_BLOCK = 6; 
+const FRACTIONS_PER_BLOCK = 6;
 const TOTAL_BLOCKS = 13;
 const TOTAL_FRACTIONS = TOTAL_BLOCKS * FRACTIONS_PER_BLOCK;
 const SECONDS_IN_DAY = 86400;
 const BLOCK_INTERVAL_SEC = SECONDS_IN_DAY / TOTAL_BLOCKS;
 const FRACTION_INTERVAL_SEC = SECONDS_IN_DAY / TOTAL_FRACTIONS;
-const START_OFFSET_SEC = 6 * 3600 - 4 * BLOCK_INTERVAL_SEC; 
+const START_OFFSET_SEC = 6 * 3600 - 4 * BLOCK_INTERVAL_SEC;
 const TARGET_TIMEZONE_HOURS = -3;
 const TARGET_TIMEZONE_MS = TARGET_TIMEZONE_HOURS * 3600000;
 
@@ -41,13 +41,15 @@ const inProgressList = [
   'Deep Rest (1)'
 ];
 
+const baseUrl = "https://robzao.github.io";
+
 const faviconList = [
-  'https://robzao.github.io/ultradian-schedule/images/favicon-green.svg',
-  'https://robzao.github.io/ultradian-schedule/images/favicon-green.svg',
-  'https://robzao.github.io/ultradian-schedule/images/favicon-green.svg',
-  'https://robzao.github.io/ultradian-schedule/images/favicon-green.svg',
-  'https://robzao.github.io/ultradian-schedule/images/favicon-yellow.svg',
-  'https://robzao.github.io/ultradian-schedule/images/favicon-red.svg'
+  `${baseUrl}/ultradian-schedule/images/favicon-green.svg`,
+  `${baseUrl}/ultradian-schedule/images/favicon-green.svg`,
+  `${baseUrl}/ultradian-schedule/images/favicon-green.svg`,
+  `${baseUrl}/ultradian-schedule/images/favicon-green.svg`,
+  `${baseUrl}/ultradian-schedule/images/favicon-yellow.svg`,
+  `${baseUrl}/ultradian-schedule/images/favicon-red.svg`
 ];
 
 let chargeIdx = 0;
@@ -57,7 +59,7 @@ let faviconIdx = 0;
 function secondsSinceMidnight() {
   const now = new Date();
   const utc = now.getTime() + now.getTimezoneOffset() * 60000;
-  const targetTime = new Date(utc + TARGET_TIMEZONE_MS); 
+  const targetTime = new Date(utc + TARGET_TIMEZONE_MS);
   return targetTime.getHours() * 3600 + targetTime.getMinutes() * 60 + targetTime.getSeconds();
 }
 
@@ -69,7 +71,7 @@ function secondsSinceMidnightAdjusted() {
 function msUntilNextInterval(intervalSec) {
   const seconds = secondsSinceMidnightAdjusted();
   const secondsToNext = intervalSec - (seconds % intervalSec);
-  return secondsToNext * 1000 + 1; 
+  return secondsToNext * 1000 + 1;
 }
 
 function getBlockProgress() {
@@ -77,17 +79,17 @@ function getBlockProgress() {
   const secondsIntoBlock = adjustedSeconds % BLOCK_INTERVAL_SEC;
   const secondsRemaining = BLOCK_INTERVAL_SEC - secondsIntoBlock;
   const percentage = (secondsRemaining / BLOCK_INTERVAL_SEC) * 100;
-  return Math.max(1, percentage); 
+  return Math.max(1, percentage);
 }
 
 function getCurrentFractionIndex() {
   const fractions = Math.floor(secondsSinceMidnightAdjusted() / FRACTION_INTERVAL_SEC);
-  return fractions % chargeList.length; 
+  return fractions % chargeList.length;
 }
 
 function getCurrentBlockIndex() {
   const blocks = Math.floor(secondsSinceMidnightAdjusted() / BLOCK_INTERVAL_SEC);
-  return blocks % inProgressList.length; 
+  return blocks % inProgressList.length;
 }
 
 function updateCharge() {
@@ -98,19 +100,17 @@ function updateCharge() {
 
 function updateSecondBasedLogic() {
   const percentageRaw = getBlockProgress();
-  const percentageRounded = Math.ceil(percentageRaw); 
+  const percentageRounded = Math.ceil(percentageRaw);
   const scaleYValue = (100 - percentageRaw) / 100;
   overlayEl.style.transform = `scaleY(${scaleYValue})`;
-  displayEl.textContent = percentageRounded + '%'; 
-  const activityName = inProgressList[getCurrentBlockIndex()]; 
+  displayEl.textContent = percentageRounded + '%';
+  const activityName = inProgressList[getCurrentBlockIndex()];
   titleEl.textContent = `${percentageRounded}% – ${activityName}`;
 }
 
 const triggerPulse = (element) => {
   element.classList.add('transition-pulse');
-  setTimeout(() => {
-    element.classList.remove('transition-pulse');
-  }, 250); 
+  setTimeout(() => { element.classList.remove('transition-pulse') }, 250);
 };
 
 function updateCaption() {
@@ -118,8 +118,8 @@ function updateCaption() {
   comingSoonEl.textContent = (inProgressIdx < inProgressList.length - 1)
     ? inProgressList[inProgressIdx + 1]
     : inProgressList[0];
-  inProgressEl.textContent = inProgressList[inProgressIdx]; 
-  triggerPulse(displayEl); 
+  inProgressEl.textContent = inProgressList[inProgressIdx];
+  triggerPulse(displayEl);
 }
 
 function updateFavicon() {
@@ -134,7 +134,7 @@ function scheduleCharge() {
 
 function scheduleSecondBasedLogic() {
   updateSecondBasedLogic();
-  setTimeout(scheduleSecondBasedLogic, 1000); 
+  setTimeout(scheduleSecondBasedLogic, 1000);
 }
 
 function scheduleCaption() {
@@ -166,7 +166,7 @@ function init() {
 document.addEventListener('DOMContentLoaded', init);
 
 function formatSecondsToTime(totalSeconds) {
-  let secondsRemaining = Math.round(totalSeconds) % SECONDS_IN_DAY; 
+  let secondsRemaining = Math.round(totalSeconds) % SECONDS_IN_DAY;
   const hours = Math.floor(secondsRemaining / 3600);
   secondsRemaining %= 3600;
   const minutes = Math.floor(secondsRemaining / 60);
