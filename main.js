@@ -110,7 +110,7 @@ function updateSecondBasedLogic() {
 
 const triggerPulse = (element) => {
   element.classList.add('transition-pulse');
-  setTimeout(() => { element.classList.remove('transition-pulse') }, 250);
+  setTimeout(() => { element.classList.remove('transition-pulse') }, 350);
 };
 
 function updateCaption() {
