@@ -75,7 +75,7 @@ body {
 }
 
 .transition-pulse {
-  animation: pulse-once 250ms ease-in-out;
+  animation: pulse-once 300ms ease-in-out;
 }
 
 #charge {
