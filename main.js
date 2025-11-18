@@ -41,7 +41,7 @@ const inProgressList = [
   'Deep Rest (1)'
 ];
 
-const baseUrl = "https://robzao.github.io";
+const baseUrl = "https://rexdux.github.io";
 
 const faviconList = [
   `${baseUrl}/ultradian-schedule/images/favicon-green.svg`,
